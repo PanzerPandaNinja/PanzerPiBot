@@ -9,9 +9,9 @@ def main(stdscr):
     stdscr.clear()
 
     elbowAngle = 0
-    servo4Angle = 0
-    stdscr.addstr(0, 0, f"Elbow Angle: {elbowAngle}")
-    stdscr.addstr(1, 0, f"Servo 4 Angle: {servo4Angle}")
+    handTwistAngle = 0
+    stdscr.addstr(0, 0, f"Elbow angle: {elbowAngle}")
+    stdscr.addstr(1, 0, f"Hand twist angle: {handTwistAngle}")
 
     while True:
         key = stdscr.getch()
@@ -21,9 +21,9 @@ def main(stdscr):
         elif key == curses.KEY_DOWN:
             elbowAngle -= 10
         elif key == curses.KEY_LEFT:
-            servo4Angle -= 10
+            handTwistAngle -= 10
         elif key == curses.KEY_RIGHT:
-            servo4Angle += 10
+            handTwistAngle += 10
         elif key == ord("q"):
             break
 
@@ -33,13 +33,13 @@ def main(stdscr):
             stdscr.addstr(0, 0, f"Elbow Angle: {elbowAngle}")
             kit.servo[3].angle = elbowAngle        
         else:
-            stdscr.addstr(0, 0, f"Elbow Angle out of range! Angle: {elbowAngle}")
+            stdscr.addstr(0, 0, f"Elbow angle out of range! Angle: {elbowAngle}")
         
-        if 0 < servo4Angle < 180:
-            stdscr.addstr(1, 0, f"Servo 4 Angle: {servo4Angle}")
-            kit.servo[4].angle = servo4Angle        
+        if 0 < handTwistAngle < 180:
+            stdscr.addstr(1, 0, f"Hand twist Angle: {handTwistAngle}")
+            kit.servo[4].angle = handTwistAngle        
         else:
-            stdscr.addstr(1, 0, f"Servo 4 Angle out of range! Angle: {servo4Angle}")
+            stdscr.addstr(1, 0, f"Hand twist angle out of range! Angle: {handTwistAngle}")
         
         stdscr.refresh()
 
