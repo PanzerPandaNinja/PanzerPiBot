@@ -8,12 +8,12 @@ def main(stdscr):
     curses.curs_set(0)  # Hide cursor
     stdscr.clear()
 
-    elbowAngle = 70
-    handTwistAngle = 80
+    elbowAngle = 80
+    handTwistAngle = 110
     shoulderTwistAngle = 100  
     shoulderLiftAngle = 40 
-    elbowLiftAngle = 120 
-    gripperAngle = 60 
+    elbowLiftAngle = 110 
+    gripperAngle = 50 
 
     stdscr.addstr(0, 0, f"Elbow angle: {elbowAngle}")
     stdscr.addstr(1, 0, f"Hand twist angle: {handTwistAngle}")
