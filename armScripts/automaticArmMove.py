@@ -8,75 +8,76 @@ def main(stdscr):
     curses.curs_set(0)  # Hide cursor
     stdscr.clear()
 
-    elbowAngle = 80
-    handTwistAngle = 110
+    shoulderTwist = kit.servo[0]
+    shoulderLift = kit.servo[1]
+    elbowLift = kit.servo[2]
+    elbow = kit.servo[3]
+    handTwist = kit.servo[4]
+    gripper = kit.servo[5]
+
+
     shoulderTwistAngle = 100  
     shoulderLiftAngle = 40 
+    elbowAngle = 80
+    handTwistAngle = 110
     elbowLiftAngle = 110 
     gripperAngle = 50 
 
-    old_elbowAngle = 0
-    old_handTwistAngle = 0
-    old_shoulderTwistAngle = 0
-    old_shoulderLiftAngle = 0
-    old_elbowLiftAngle = 0
-    old_gripperAngle = 0
+
+    # Set all joints to their respective angles
+    shoulderTwist.angle = shoulderTwistAngle
+    old_shoulderTwistAngle = shoulderTwistAngle
+    shoulderLift.angle = shoulderLiftAngle
+    old_shoulderLiftAngle = shoulderLiftAngle
+    elbowLift.angle = elbowLiftAngle
+    old_elbowLiftAngle = elbowLiftAngle
+    elbow.angle = elbowAngle
+    old_elbowAngle = elbowAngle
+    handTwist.angle = handTwistAngle
+    old_handTwistAngle = handTwistAngle
+    gripper.angle = gripperAngle
+    old_gripperAngle = gripperAngle
+
 
 
     while True:
         key = stdscr.getch()
 
-        if key == curses.KEY_UP:
-            handTwistAngle -= 10
-        elif key == curses.KEY_DOWN:
-            handTwistAngle += 10
-        elif key == curses.KEY_LEFT:
-            elbowAngle += 10
-        elif key == curses.KEY_RIGHT:
-            elbowAngle -= 10
-            
-
-        elif key == ord("s"):  # Decrease shoulder lift angle
-            smoothMove()
+        if key == ord("s"):  # Decrease shoulder lift angle
+            smoothMove(elbow, old_elbowAngle)
 
         elif key == ord("q"):
             break
 
         stdscr.refresh()
 
-def smoothMove():
+def smoothMove(elbow, old_elbowAngle):
     for angle in range(80, 141):  # Loop 
-        armTwist = angle
-        armAngle = angle
-        print(f"armTwist: {armTwist}, armAngle: {armAngle}")
-        kit.servo[3].angle = armAngle
-        kit.servo[5].angle = armTwist
-        kit.servo[2].angle = armAngle
-        kit.servo[1].angle = armTwist
+        
+
+        print(f"elbow: {angle}")
+        move_servo(elbow, angle, old_elbowAngle)
+        old_elbowAngle = angle
 
         time.sleep(0.04)
 
     for angle in range(139, 80, -1):  # Loop back 
-        armTwist = angle
-        armAngle = angle
-        print(f"armTwist: {armTwist}, armAngle: {armAngle}")
-        kit.servo[3].angle = armAngle
-        kit.servo[5].angle = armTwist
-        kit.servo[2].angle = armAngle
-        kit.servo[1].angle = armTwist
+        print(f"elbow: {angle}")    
+        move_servo(elbow, angle, old_elbowAngle)
+        old_elbowAngle = angle
 
         time.sleep(0.04)
 
 
 
-def move_servo(servoNr, new_angle, old_angle):
+def move_servo(joint, new_angle, old_angle):
     if new_angle > old_angle:
         for angle in range(old_angle, new_angle + 1):
-            kit.servo[servoNr].angle = angle
-            time.sleep(0.04)
+            joint.angle = angle
+            time.sleep(0.03)
     else:
         for angle in range(old_angle, new_angle - 1, -1):
-            kit.servo[servoNr].angle = angle
-            time.sleep(0.04)
+            joint.angle = angle
+            time.sleep(0.03)
 
 curses.wrapper(main)
